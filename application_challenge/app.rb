@@ -13,14 +13,13 @@ require './model/visit'
 # database configuration
 set :database_file, 'database.yml'
 
-# def call
-get '/' do
-  response = Net::HTTP.get_response('secure-cliffs-06348.herokuapp.com', '/')
-  parsed_response = JSON.parse(response.body)
-  save_to_database(parsed_response)
+def call
+  save_to_database(api_response)
+end
 
-  @pageviews = Pageview.all
-  erb :index
+def api_response
+  response = Net::HTTP.get_response('secure-cliffs-06348.herokuapp.com', '/')
+  JSON.parse(response.body)
 end
 
 def save_to_database(parsed_response)

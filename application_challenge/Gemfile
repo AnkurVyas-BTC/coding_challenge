@@ -5,7 +5,11 @@ gem 'activerecord'
 gem 'mysql2'
 gem 'pry', require: false, group: :development
 gem 'rake'
-gem 'rspec'
 gem 'rubocop'
 gem 'sinatra-activerecord'
 gem 'simplecov', require: false, group: :test
+
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+end
