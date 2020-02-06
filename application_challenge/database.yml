@@ -1,0 +1,15 @@
+default: &default
+  adapter: mysql2
+  # encoding: unicode
+  pool: 5
+  username: root
+  password: root
+  host: localhost
+
+development:
+  <<: *default
+  database: coding_challenge_dev
+
+test:
+  <<: *default
+  database: coding_challenge_test
