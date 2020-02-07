@@ -24,6 +24,7 @@ end
 
 def save_to_database(parsed_response)
   parsed_response.each do |result|
+    result.deep_stringify_keys!
     visit = initialize_visit(result)
     save_pageviews(result['actionDetails'], visit) if visit.save
   end
@@ -39,6 +40,7 @@ end
 
 def save_pageviews(action_details, visit)
   action_details.each do |detail|
+    detail.deep_stringify_keys!
     next unless Pageview.find_by(url: detail['url']).nil?
 
     visit.pageviews.create(
