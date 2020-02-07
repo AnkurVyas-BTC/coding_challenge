@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.6.3'
 gem 'activerecord'
 gem 'mysql2'
 gem 'pry', require: false, group: :development
