@@ -2,14 +2,19 @@ default: &default
   adapter: mysql2
   # encoding: unicode
   pool: 5
-  username: root
-  password: root
-  host: localhost
+  username: codingchallenge
+  password: india2020
+  host: coding-challenge.csamkcs4ck98.us-east-1.rds.amazonaws.com
+  port: 3306
 
 development:
   <<: *default
-  database: coding_challenge_dev
+  database: codingchallenge
 
 test:
   <<: *default
-  database: coding_challenge_test
+  database: codingchallenge
+
+production:
+  <<: *default
+  database: codingchallenge

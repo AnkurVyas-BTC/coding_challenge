@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  SinatraFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: coding_challenge
+      Handler: app.call
+      Runtime: ruby2.5
+      CodeUri: s3://codingchallenge-btc/929ef9fc4667ef1a57ea84590434b937
+      MemorySize: 512
+      Timeout: 900
+      Events:
+        StagingSinatraApi:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+            RestApiId:
+              Ref: CodingChallengeSinatraAPI
+  CodingChallengeSinatraAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: CodingChallengeSinatraAPI
+      StageName: Prod
+      DefinitionBody:
+        swagger: '2.0'
+        basePath: /Prod
+        info:
+          title:
+            Ref: AWS::StackName
+        paths:
+          /{proxy+}:
+            x-amazon-apigateway-any-method:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SinatraFunction.Arn}/invocations
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
+          /:
+            get:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SinatraFunction.Arn}/invocations
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
+  ConfigLambdaPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+    - SinatraFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: SinatraFunction
+      Principal: apigateway.amazonaws.com
+Outputs:
+  SinatraAppUrl:
+    Description: App endpoint URL
+    Value:
+      Fn::Sub: https://${CodingChallengeSinatraAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod/

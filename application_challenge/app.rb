@@ -3,7 +3,7 @@
 # require sinatra and active record here
 require 'sinatra'
 require 'sinatra/activerecord'
-require 'pry'
+# require 'pry'
 require 'net/http'
 
 # require models here
@@ -13,7 +13,7 @@ require './model/visit'
 # database configuration
 set :database_file, 'database.yml'
 
-def call
+def call(params = {})
   save_to_database(api_response)
 end
 
